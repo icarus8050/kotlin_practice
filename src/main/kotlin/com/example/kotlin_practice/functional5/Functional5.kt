@@ -118,3 +118,13 @@ tailrec fun <T, R> FunList<T>.foldLeft(
 }
 
 fun FunList<Int>.sum(): Int = foldLeft(0) { acc, x -> acc + x }
+
+fun <T> FunList<T>.filterByFoldLeft(
+    p: (T) -> Boolean
+): FunList<T> = this.foldLeft(Nil) { acc: FunList<T>, v ->
+    if (p(v)) {
+        acc.appendTail(v)
+    } else {
+        acc
+    }
+}
