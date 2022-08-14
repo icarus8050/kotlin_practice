@@ -32,4 +32,6 @@ fun main() {
     })
 
     println(intList.map { it + 3 }.filter { it % 2 == 0 }.sum())
+
+    println(intList.foldRight(0) { x, acc -> x - acc} )
 }

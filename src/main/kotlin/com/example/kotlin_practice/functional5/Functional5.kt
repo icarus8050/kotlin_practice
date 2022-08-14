@@ -128,3 +128,8 @@ fun <T> FunList<T>.filterByFoldLeft(
         acc
     }
 }
+
+fun <T, R> FunList<T>.foldRight(acc: R, f: (T, R) -> R): R = when (this) {
+    is Nil -> acc
+    is Cons -> f(head, tail.foldRight(acc, f))
+}
