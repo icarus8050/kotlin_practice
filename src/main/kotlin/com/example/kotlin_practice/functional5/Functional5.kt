@@ -94,3 +94,8 @@ tailrec fun <T> FunList<T>.takeWhile(acc: FunList<T> = Nil, p: (T) -> Boolean): 
         acc.reverse()
     }
 }
+
+tailrec fun<T, R> FunList<T>.map(acc: FunList<R> = Nil, f: (T) -> R): FunList<R> = when (this) {
+    is Nil -> acc.reverse()
+    is Cons -> tail.map(acc.addHead(f(head)), f)
+}
