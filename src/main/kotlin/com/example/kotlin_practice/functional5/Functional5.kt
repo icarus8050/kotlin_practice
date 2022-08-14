@@ -95,7 +95,16 @@ tailrec fun <T> FunList<T>.takeWhile(acc: FunList<T> = Nil, p: (T) -> Boolean): 
     }
 }
 
-tailrec fun<T, R> FunList<T>.map(acc: FunList<R> = Nil, f: (T) -> R): FunList<R> = when (this) {
+tailrec fun <T, R> FunList<T>.map(acc: FunList<R> = Nil, f: (T) -> R): FunList<R> = when (this) {
     is Nil -> acc.reverse()
     is Cons -> tail.map(acc.addHead(f(head)), f)
+}
+
+tailrec fun <T, R> FunList<T>.indexedMap(
+    index: Int = 0,
+    acc: FunList<R> = Nil,
+    f: (Int, T) -> R
+): FunList<R> = when (this) {
+    is Nil -> acc.reverse()
+    is Cons -> tail.indexedMap(index + 1, acc.addHead(f(index, head)), f)
 }
