@@ -108,3 +108,11 @@ tailrec fun <T, R> FunList<T>.indexedMap(
     is Nil -> acc.reverse()
     is Cons -> tail.indexedMap(index + 1, acc.addHead(f(index, head)), f)
 }
+
+tailrec fun <T, R> FunList<T>.foldLeft(
+    acc: R,
+    f: (R, T) -> R
+): R = when (this) {
+    is Nil -> acc
+    is Cons -> tail.foldLeft(f(acc, head), f)
+}
