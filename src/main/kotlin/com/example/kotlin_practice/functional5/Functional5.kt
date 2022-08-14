@@ -116,3 +116,5 @@ tailrec fun <T, R> FunList<T>.foldLeft(
     is Nil -> acc
     is Cons -> tail.foldLeft(f(acc, head), f)
 }
+
+fun FunList<Int>.sum(): Int = foldLeft(0) { acc, x -> acc + x }

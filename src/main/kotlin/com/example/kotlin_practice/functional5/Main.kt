@@ -30,4 +30,6 @@ fun main() {
     println(intList.takeWhile {
         it < 3
     })
+
+    println(intList.map { it + 3 }.filter { it % 2 == 0 }.sum())
 }
