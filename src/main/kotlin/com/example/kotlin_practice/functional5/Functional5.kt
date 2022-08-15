@@ -134,10 +134,38 @@ fun <T, R> FunList<T>.foldRight(acc: R, f: (T, R) -> R): R = when (this) {
     is Cons -> f(head, tail.foldRight(acc, f))
 }
 
-fun <T, R> FunList<T>.mapByFoldList(f: (T) -> R): FunList<R> = foldLeft(Nil) {
-        acc: FunList<R>, x -> acc.appendTail(f(x))
+fun <T, R> FunList<T>.mapByFoldList(f: (T) -> R): FunList<R> = foldLeft(Nil) { acc: FunList<R>, x ->
+    acc.appendTail(f(x))
 }
 
-fun <T, R> FunList<T>.mapByFoldRight(f: (T) -> R): FunList<R> = foldRight(Nil) {
-        x, acc: FunList<R> -> acc.addHead(f(x))
+fun <T, R> FunList<T>.mapByFoldRight(f: (T) -> R): FunList<R> = foldRight(Nil) { x, acc: FunList<R> ->
+    acc.addHead(f(x))
 }
+
+tailrec fun <T1, T2, R> FunList<T1>.zipWith(
+    f: (T1, T2) -> R,
+    list: FunList<T2>,
+    acc: FunList<R> = Nil,
+): FunList<R> = when {
+    this === Nil || list === Nil -> acc.reverse()
+    else -> getTail().zipWith(
+        f = f,
+        list = list.getTail(),
+        acc = acc.addHead(
+            f(getHead(), list.getHead())
+        ),
+    )
+}
+
+fun <T, R> FunList<T>.associate(f: (T) -> Pair<T, R>): Map<T, R> {
+    return foldRight(mapOf()) { value, acc ->
+        acc.plus(f(value))
+    }
+}
+
+fun <T, K> FunList<T>.groupBy(f: (T) -> K): Map<K, FunList<T>> =
+    foldRight(emptyMap()) { value, acc ->
+        acc.plus(
+            f(value) to (acc.getOrElse(f(value)) { Nil }.addHead(value))
+        )
+    }
