@@ -133,3 +133,11 @@ fun <T, R> FunList<T>.foldRight(acc: R, f: (T, R) -> R): R = when (this) {
     is Nil -> acc
     is Cons -> f(head, tail.foldRight(acc, f))
 }
+
+fun <T, R> FunList<T>.mapByFoldList(f: (T) -> R): FunList<R> = foldLeft(Nil) {
+        acc: FunList<R>, x -> acc.appendTail(f(x))
+}
+
+fun <T, R> FunList<T>.mapByFoldRight(f: (T) -> R): FunList<R> = foldRight(Nil) {
+        x, acc: FunList<R> -> acc.addHead(f(x))
+}
