@@ -12,6 +12,13 @@ sealed class FunList<out T> {
     ) : FunList<T>()
 }
 
+fun <T> funListOf(vararg elements: T): FunList<T> = elements.toFunList()
+
+private fun <T> Array<out T>.toFunList(): FunList<T> = when {
+    this.isEmpty() -> Nil
+    else -> Cons(this[0], this.copyOfRange(1, this.size).toFunList())
+}
+
 fun <T> FunList<T>.addHead(head: T): FunList<T> = Cons(head, this)
 
 fun <T> FunList<T>.appendTail(value: T): FunList<T> = when (this) {
@@ -169,3 +176,49 @@ fun <T, K> FunList<T>.groupBy(f: (T) -> K): Map<K, FunList<T>> =
             f(value) to (acc.getOrElse(f(value)) { Nil }.addHead(value))
         )
     }
+
+tailrec fun IntProgression.toFunList(acc: FunList<Int> = FunList.Nil): FunList<Int> = when {
+    step > 0 -> when {
+        first > last -> acc.reverse()
+        else -> ((first + step)..last step step).toFunList(acc.addHead(first))
+    }
+    else -> when {
+        first >= last -> {
+            IntProgression.fromClosedRange(first + step, last, step).toFunList(acc.addHead(first))
+        }
+        else -> {
+            acc.reverse()
+        }
+    }
+}
+
+tailrec fun <T> FunList<T>.toString(acc: String): String = when (this) {
+    is Nil -> "[${acc.drop(2)}]"
+    is Cons -> tail.toString("$acc, $head")
+}
+
+fun <T> printFunList(list: FunList<T>) = list.toStringByFoldLeft()
+
+fun <T> FunList<T>.toStringByFoldLeft(): String =
+    "[${foldLeft("") { acc, x -> "$acc, $x" }.drop(2)}]"
+
+// 명령형 방식
+fun imperativeWay(intList: List<Int>): Int {
+    for (value in intList) {
+        val doubleValue = value * value
+        if (doubleValue < 10) {
+            return doubleValue
+        }
+    }
+
+    throw NoSuchElementException("There is no value")
+}
+
+// 함수형 방식
+fun functionalWay(intList: List<Int>): Int =
+    intList.map { n -> n * n }
+        .first { n -> n < 10 }
+
+fun realFunctionalWay(intList: List<Int>): Int = intList.asSequence()
+    .map { n -> n * n }
+    .first { n -> n < 10 }
