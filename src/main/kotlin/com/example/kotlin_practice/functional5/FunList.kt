@@ -222,3 +222,10 @@ fun functionalWay(intList: List<Int>): Int =
 fun realFunctionalWay(intList: List<Int>): Int = intList.asSequence()
     .map { n -> n * n }
     .first { n -> n < 10 }
+
+tailrec fun squareRoot(num: Int = 1, acc: Int): Int = when {
+    acc > 1000 -> num - 1
+    else -> {
+        squareRoot(num + 1, num * num + acc)
+    }
+}
