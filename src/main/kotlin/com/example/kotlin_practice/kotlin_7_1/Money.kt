@@ -10,13 +10,21 @@ data class Money(
     }
 
     operator fun plus(
-        other: Money
+        other: Money,
     ): Money {
         return Money(value + other.value)
     }
+
+    operator fun minus(other: Money) = Money(value - other.value)
+    operator fun times(other: Money) = Money(value * other.value)
+    operator fun div(other: Money) = Money(value / other.value)
+    operator fun rem(other: Money) = Money(value % other.value)
 }
 
 fun main() {
-    val sum = Money.of(5000) + Money.of(8000)
-    println(sum.value) // 13_000
+    println(Money.of(100) + Money.of(50)) // 150
+    println(Money.of(5000) - Money.of(3000)) // 2_000
+    println(Money.of(10) * Money.of(20)) // 200
+    println(Money.of(500) / Money.of(10)) // 50
+    println(Money.of(5) % Money.of(3)) // 2
 }
