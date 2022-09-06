@@ -14,4 +14,10 @@ fun main() {
     val foo2 = Foo(1, 4)
     println(foo1 > foo2) // false
     println(foo1 < foo2) // true
+
+    println(Foo(3, 3) in Foo(1, 1)..Foo(5, 5)) // true
+
+    val (a, b) = Foo(10, 50)
+    println(a) // 10
+    println(b) // 50
 }
