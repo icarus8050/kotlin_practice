@@ -51,6 +51,14 @@ fun <T> FunList<T>.getTail(): FunList<T> = when (this) {
     is Cons -> tail
 }
 
+infix fun <T> FunList<T>.concat(value: FunList<T>): FunList<T> {
+    tailrec fun innerAppend(listA: FunList<T>, listB: FunList<T>): FunList<T> = when (listA) {
+        FunList.Nil -> listB
+        is FunList.Cons -> innerAppend(listA.tail, listB.addHead(listA.head))
+    }
+    return innerAppend(this.reverse(), value)
+}
+
 fun imperativeFilter(numList: List<Int>): List<Int> {
     val newList = mutableListOf<Int>()
     for (num in numList) {
@@ -197,7 +205,7 @@ tailrec fun <T> FunList<T>.toString(acc: String): String = when (this) {
     is Cons -> tail.toString("$acc, $head")
 }
 
-fun <T> printFunList(list: FunList<T>) = list.toStringByFoldLeft()
+fun <T> printFunList(list: FunList<T>) = println(list.toStringByFoldLeft())
 
 fun <T> FunList<T>.toStringByFoldLeft(): String =
     "[${foldLeft("") { acc, x -> "$acc, $x" }.drop(2)}]"
